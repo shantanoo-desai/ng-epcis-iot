@@ -1,0 +1,27 @@
+.site-container {
+  margin: 4rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-container > * {
+  width: 100%;
+}
+
+.sensor-container {
+  display: flex;
+  flex-direction: row;
+  margin: 2rem;
+}
+
+button {
+  margin-right: 10px;
+}
+
+.container {
+  margin: 3rem;
+}
+
+.site-btn {
+  margin: 10px 0 20px 10px;
+}

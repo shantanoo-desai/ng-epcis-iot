@@ -1,0 +1,22 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+  <mat-icon>menu</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item routerLink="/dashboard">
+    <mat-icon>home</mat-icon>
+    <span>Main Page</span>
+  </button>
+  <button mat-menu-item routerLink="/sites">
+    <mat-icon>settings_applications</mat-icon>
+    <span>Site Settings</span>
+  </button>
+</mat-menu>
+  <span>App</span>
+</mat-toolbar-row>
+</mat-toolbar>
+
+<router-outlet>
+
+</router-outlet>
