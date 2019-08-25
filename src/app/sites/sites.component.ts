@@ -59,7 +59,7 @@ export class SitesComponent implements OnInit  {
               private countryService: SitesService,
               private apollo: Apollo) {
 
-    countryService.getCountryCode()
+    this.countryService.getCountryCode()
       .subscribe((data: any) => {
         this.countriesList = data.map(c => {
           return  {
