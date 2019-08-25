@@ -1,6 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { SitesService } from './sites.service';
+import { Apollo } from 'apollo-angular';
+import gql from 'graphql-tag';
+
+/* GraphQL Queries and Mutations */
+const getSites = gql`{
+  sites {
+    _id
+    company
+    siteName
+    countryCode
+    city
+    sensors {
+      mac
+      bizLocation
+    }
+  }
+}`;
 
 @Component({
   selector: 'app-sites',
@@ -31,13 +48,18 @@ export class SitesComponent implements OnInit  {
       ]
     }]
   };
+  loading = true;
+  error: any;
 
   finalData = {};
 
   countriesList: string[] = [];
 
-  constructor(private formBuilder: FormBuilder, private countryService: SitesService) {
-    countryService.getCountryCode()
+  constructor(private formBuilder: FormBuilder,
+              private countryService: SitesService,
+              private apollo: Apollo) {
+
+    this.countryService.getCountryCode()
       .subscribe((data: any) => {
         this.countriesList = data.map(c => {
           return  {
@@ -53,7 +75,18 @@ export class SitesComponent implements OnInit  {
       sites: this.formBuilder.array([])
     });
     // this.setSites();
-    this.addNewSite();
+    this.apollo.watchQuery({
+      query: getSites,
+    }).valueChanges.subscribe((result: any) => {
+      this.data.sites = result.data && result.data.sites;
+      if (this.data.sites.length) {
+        this.setSites();
+      } else {
+        this.addNewSite();
+      }
+      this.loading = result.loading;
+      this.error = result.error;
+    });
   }
 
   addNewSite() {
