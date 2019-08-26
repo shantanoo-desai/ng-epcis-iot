@@ -120,11 +120,11 @@
     
         </form>
         <div class="btn-group mt-3">
-                <button mat-stroked-button color="primary" (click)="addNewSite()">
+                <!-- <button mat-stroked-button color="primary" (click)="addNewSite()">
                         Add New Site
-                </button>
+                </button> -->
                 <button mat-raised-button color="primary" type="submit" [disabled]="!dynamicForm.valid" (click)="onSubmit()" *ngIf="dynamicForm.get('sites').controls.length">
-                  Submit
+                  {{ (siteId === 'new') ? 'Add Site' : 'Submit' }}
                 </button>
         </div>
     </div>

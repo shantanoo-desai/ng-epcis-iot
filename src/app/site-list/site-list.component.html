@@ -30,7 +30,8 @@
               <ul>
                 <li *ngFor="let sensor of site.sensors">Sensor Address: <code>{{sensor.mac}}</code> located at <code>{{sensor.bizLocation}}</code></li>
               </ul>
-              <button mat-raised-button color="warn" (click)="removeSite(i)">Remove</button>
+              <button mat-raised-button color="warn" (click)="removeSite(i)"><mat-icon>delete</mat-icon>Remove Site</button>
+              <button mat-raised-button [routerLink]="['/sites', site._id]" [routerLinkActive]="['active']" ><mat-icon>edit</mat-icon>Update Site Information</button>
             </mat-expansion-panel>
           </mat-accordion>
         </div>

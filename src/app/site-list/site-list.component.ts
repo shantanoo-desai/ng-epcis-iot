@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
@@ -28,17 +29,18 @@ const removeSite = gql`
 `;
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  selector: 'app-site-list',
+  templateUrl: './site-list.component.html',
+  styleUrls: ['./site-list.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class SiteListComponent implements OnInit {
   subscribedSites: Site[] = [];
   removedSiteInfo = {};
   loading = true;
   error: any;
 
   constructor(private apollo: Apollo,
+              private router: Router,
               private snackBar: MatSnackBar) { }
 
   ngOnInit() {
@@ -69,6 +71,10 @@ export class DashboardComponent implements OnInit {
       console.log('mutation error: ' + error);
       this.error = error;
     });
+  }
+
+  updateSite(siteID: string) {
+    this.router.navigate(['/sites', siteID]);
   }
 
 }

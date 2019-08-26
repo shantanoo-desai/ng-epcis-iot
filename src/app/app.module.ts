@@ -10,16 +10,16 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { SitesComponent } from './sites/sites.component';
+import { SiteListComponent } from './site-list/site-list.component';
+import { SiteDetailsComponent } from './site-details/site-details.component';
 import { MaterialModule } from './material.module'; // Angular Material Module
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
-    SitesComponent
+    SiteListComponent,
+    SiteDetailsComponent
   ],
   imports: [
     BrowserModule,

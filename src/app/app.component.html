@@ -4,13 +4,13 @@
   <mat-icon>menu</mat-icon>
 </button>
 <mat-menu #menu="matMenu">
-  <button mat-menu-item routerLink="/dashboard">
-    <mat-icon>home</mat-icon>
-    <span>Dashboard</span>
+  <button mat-menu-item routerLink="/">
+    <mat-icon>view_list</mat-icon>
+    <span>Sites</span>
   </button>
-  <button mat-menu-item routerLink="/sites">
-    <mat-icon>settings_applications</mat-icon>
-    <span>Site Settings</span>
+  <button mat-menu-item [routerLink]="['/sites', 'new']" routerLinkActive="router-link-active" >
+    <mat-icon>add</mat-icon>
+    <span>Add New Site</span>
   </button>
 </mat-menu>
   <span> {{title}} App</span>

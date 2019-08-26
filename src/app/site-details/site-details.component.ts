@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { SitesService } from './sites.service';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 
 /* GraphQL Queries and Mutations */
-const getSites = gql`{
-  sites {
+const getSite = gql`
+query site($siteId: ID!) {
+  site(siteId: $siteId) {
     _id
     company
     siteName
@@ -20,43 +22,29 @@ const getSites = gql`{
 }`;
 
 @Component({
-  selector: 'app-sites',
-  templateUrl: './sites.component.html',
-  styleUrls: [ './sites.component.css' ],
+  selector: 'app-site-details',
+  templateUrl: './site-details.component.html',
+  styleUrls: [ './site-details.component.css' ],
   providers: [SitesService]
 })
-export class SitesComponent implements OnInit  {
+
+export class SiteDetailsComponent implements OnInit  {
 
   dynamicForm: FormGroup;
   macPattern = '^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$';
 
-  data = {
-      sites: [{
-      company: 'acme',
-      siteName: 'factory',
-      countryCode: 'DE',
-      city: 'frankfurt',
-      sensors: [
-        {
-          mac: '00:11:DE:AD:BE:EF',
-          bizLocation: 'location1'
-        },
-        {
-          mac: '11:11:DE:AD:BE:EF',
-          bizLocation: 'location2'
-        }
-      ]
-    }]
-  };
+  data = {sites: []};
   loading = true;
   error: any;
+  siteId = '';
 
-  finalData = {};
+  finalData = {sites: []};
 
   countriesList: string[] = [];
 
   constructor(private formBuilder: FormBuilder,
               private countryService: SitesService,
+              private route: ActivatedRoute,
               private apollo: Apollo) {
 
     this.countryService.getCountryCode()
@@ -74,15 +62,33 @@ export class SitesComponent implements OnInit  {
     this.dynamicForm = this.formBuilder.group({
       sites: this.formBuilder.array([])
     });
-    // this.setSites();
-    this.apollo.watchQuery({
-      query: getSites,
-    }).valueChanges.subscribe((result: any) => {
-      this.data.sites = result.data && result.data.sites;
-      if (this.data.sites.length) {
-        this.setSites();
+    this.route.paramMap.subscribe((params: Params) => {
+      // console.log(params.get('id'));
+      this.siteId = params.get('id');
+      // console.log(this.siteId);
+      // this.setSites();
+      if (this.siteId !== 'new') {
+        this.getSpecifiSiteById();
       } else {
+        this.dynamicForm = this.formBuilder.group({
+        sites: this.formBuilder.array([])
+        });
         this.addNewSite();
+      }
+    });
+  }
+
+  getSpecifiSiteById() {
+    this.apollo.watchQuery({
+      query: getSite,
+      variables: {
+        siteId: this.siteId
+      },
+    }).valueChanges.subscribe((result: any) => {
+      // console.log(result);
+      if (result.data && result.data.site) {
+        this.data.sites.push(result.data.site);
+        this.setSites();
       }
       this.loading = result.loading;
       this.error = result.error;
@@ -153,6 +159,28 @@ export class SitesComponent implements OnInit  {
     return arr;
   }
 
+  createNewSite() {
+    const createSite = gql`
+      mutation createSite($siteInput: SiteInput!) {
+        createSite(siteInput: $siteInput) {
+          _id
+        }
+      }
+    `;
+    console.log(this.finalData);
+    this.apollo.mutate({
+      mutation: createSite,
+      variables: {siteInput: this.finalData.sites[0]},
+      }).subscribe(({data}) => {
+        console.log(data);
+      });
+
+  }
+
+  updateSite() {
+    console.log('update site');
+  }
+
   onSubmit() {
     const sitesToSubmit = this.dynamicForm.value;
     sitesToSubmit.sites.forEach(site => {
@@ -162,5 +190,7 @@ export class SitesComponent implements OnInit  {
       site.topic = topic;
     });
     this.finalData = sitesToSubmit;
+
+    (this.siteId === 'new') ? this.createNewSite() : this.updateSite();
   }
 }
