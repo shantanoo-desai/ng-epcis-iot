@@ -87,7 +87,12 @@
     
                             <!-- EPCIS Business Location of Sensor Placement -->
                             <mat-form-field>
-                            <input matInput placeholder="Business Location" formControlName="bizLocation">
+                                <mat-label>Business Location</mat-label>
+                                <mat-select formControlName="bizLocation">
+                                    <mat-option *ngFor="let loc of bizLocations" [value]="loc">
+                                        {{loc}}
+                                    </mat-option>
+                                </mat-select>
                             </mat-form-field>
                             
                             <!-- Remove Sensor Information Button -->

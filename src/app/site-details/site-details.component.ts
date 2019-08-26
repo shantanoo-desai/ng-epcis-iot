@@ -21,6 +21,12 @@ query site($siteId: ID!) {
   }
 }`;
 
+const getBizLocationsQ = gql`
+  query {
+    bizLocations
+  }
+`;
+
 @Component({
   selector: 'app-site-details',
   templateUrl: './site-details.component.html',
@@ -41,6 +47,7 @@ export class SiteDetailsComponent implements OnInit  {
   finalData = {sites: []};
 
   countriesList: string[] = [];
+  bizLocations: string[] = [];
 
   constructor(private formBuilder: FormBuilder,
               private countryService: SitesService,
@@ -62,6 +69,7 @@ export class SiteDetailsComponent implements OnInit  {
     this.dynamicForm = this.formBuilder.group({
       sites: this.formBuilder.array([])
     });
+    this.getBizLocations();
     this.route.paramMap.subscribe((params: Params) => {
       // console.log(params.get('id'));
       this.siteId = params.get('id');
@@ -75,6 +83,16 @@ export class SiteDetailsComponent implements OnInit  {
         });
         this.addNewSite();
       }
+    });
+  }
+
+  getBizLocations() {
+    this.apollo.watchQuery({
+      query: getBizLocationsQ,
+    }).valueChanges.subscribe((result: any) => {
+      this.bizLocations = result.data && result.data.bizLocations;
+      this.loading = result.loading;
+      this.error = result.error;
     });
   }
 
