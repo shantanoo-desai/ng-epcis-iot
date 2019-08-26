@@ -44,7 +44,7 @@ export class SiteDetailsComponent implements OnInit  {
   error: any;
   siteId = '';
 
-  finalData = {sites: []};
+  // finalData = {sites: []};
 
   countriesList: string[] = [];
   bizLocations: string[] = [];
@@ -177,7 +177,7 @@ export class SiteDetailsComponent implements OnInit  {
     return arr;
   }
 
-  createNewSite() {
+  createNewSite(siteInfo: any) {
     const createSite = gql`
       mutation createSite($siteInput: SiteInput!) {
         createSite(siteInput: $siteInput) {
@@ -185,18 +185,32 @@ export class SiteDetailsComponent implements OnInit  {
         }
       }
     `;
-    console.log(this.finalData);
+    // console.log(this.finalData);
     this.apollo.mutate({
       mutation: createSite,
-      variables: {siteInput: this.finalData.sites[0]},
+      variables: {siteInput: siteInfo.sites[0]},
       }).subscribe(({data}) => {
         console.log(data);
       });
 
   }
 
-  updateSite() {
-    console.log('update site');
+  updateSite(siteInfo: any) {
+    // console.log('update site');
+    const updateSite = gql`
+      mutation updateSite($siteId: ID!, $siteInput: SiteInput!) {
+        updateSite(siteId: $siteId, siteInput: $siteInput) {
+          _id
+        }
+      }
+    `;
+
+    this.apollo.mutate({
+      mutation: updateSite,
+      variables: {siteId: this.siteId, siteInput: siteInfo.sites[0]},
+    }).subscribe(({data}) => {
+      console.log(data);
+    });
   }
 
   onSubmit() {
@@ -207,8 +221,8 @@ export class SiteDetailsComponent implements OnInit  {
       console.log(topic);
       site.topic = topic;
     });
-    this.finalData = sitesToSubmit;
+    // this.finalData = sitesToSubmit;
 
-    (this.siteId === 'new') ? this.createNewSite() : this.updateSite();
+    (this.siteId === 'new') ? this.createNewSite(sitesToSubmit) : this.updateSite(sitesToSubmit);
   }
 }
