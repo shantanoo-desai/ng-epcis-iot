@@ -15,7 +15,7 @@
 
 <div class="row mt-5">
     <div class="container">
-        <form [formGroup]="dynamicForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="dynamicForm">
         <div formArrayName="sites">
             <div *ngFor="let site of dynamicForm.get('sites').controls; let i=index;" class="mt-2">
             <mat-card>
@@ -135,6 +135,6 @@
     </div>
 </div>
   
-  <pre>
-    {{ finalData | json }}
-  </pre>
+  <!-- <pre>
+      {{ dynamicForm.value | json}}
+  </pre> -->
