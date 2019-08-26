@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@ang
 import { SitesService } from './sites.service';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 /* GraphQL Queries and Mutations */
 const getSite = gql`
@@ -52,6 +53,7 @@ export class SiteDetailsComponent implements OnInit  {
   constructor(private formBuilder: FormBuilder,
               private countryService: SitesService,
               private route: ActivatedRoute,
+              private snackBar: MatSnackBar,
               private apollo: Apollo) {
 
     this.countryService.getCountryCode()
@@ -189,8 +191,12 @@ export class SiteDetailsComponent implements OnInit  {
     this.apollo.mutate({
       mutation: createSite,
       variables: {siteInput: siteInfo.sites[0]},
-      }).subscribe(({data}) => {
-        console.log(data);
+      }).subscribe((data: any) => {
+        // console.log(data);
+        this.snackBar.open(`New Site with ID: ${data.data.createSite._id}`, 'Done', {duration: 3000});
+      }, (error) => {
+        console.log(error);
+        this.error = error;
       });
 
   }
@@ -208,8 +214,12 @@ export class SiteDetailsComponent implements OnInit  {
     this.apollo.mutate({
       mutation: updateSite,
       variables: {siteId: this.siteId, siteInput: siteInfo.sites[0]},
-    }).subscribe(({data}) => {
-      console.log(data);
+    }).subscribe((data: any) => {
+      // console.log(data);
+      this.snackBar.open(`Site with ID: ${data.data.updateSite._id} Updated`, 'Done', {duration: 3000});
+    }, (error) => {
+      console.log(error);
+      this.error = error;
     });
   }
 
@@ -218,7 +228,7 @@ export class SiteDetailsComponent implements OnInit  {
     sitesToSubmit.sites.forEach(site => {
       let topic = '';
       topic = `${site.company}/${site.siteName}/${site.countryCode}/${site.city}/+/env`;
-      console.log(topic);
+      // console.log(topic);
       site.topic = topic;
     });
     // this.finalData = sitesToSubmit;

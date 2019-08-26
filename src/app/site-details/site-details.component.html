@@ -1,6 +1,7 @@
 <div class="row mt-3">
     <div class="container">
         <h1>Site Configuration</h1>
+        <mat-progress-bar mode="query" *ngIf="loading"></mat-progress-bar>
     </div>
 </div>
 <div class="row">
@@ -9,6 +10,9 @@
                 <mat-icon>info</mat-icon>
                 <p>Enter all the relevant site information in <em>Lower Case</em> and special characters like: <strong>Ö</strong>, <strong>Ü</strong>, <strong>Ä</strong>
                 into their equivalent tranformed alphabets (e.g. <strong>OE</strong>, <strong>UE</strong>, <strong>AE</strong>) in order to avoid discrepency.</p>
+            </div>
+            <div class="alert alert-danger" role="alert" *ngIf="error">
+                <strong>Error Occured</strong> Please Try Again
             </div>
     </div>
 </div>
