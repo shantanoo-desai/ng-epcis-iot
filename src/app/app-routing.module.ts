@@ -1,21 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { SitesComponent } from './sites/sites.component';
+import { SiteListComponent } from './site-list/site-list.component';
+import { SiteDetailsComponent } from './site-details/site-details.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full'
+    component: SiteListComponent
   },
   {
-    path: 'dashboard',
-    component: DashboardComponent
-  },
-  {
-    path: 'sites',
-    component: SitesComponent
+    path: 'sites/:id',
+    component: SiteDetailsComponent
   }
 ];
 
