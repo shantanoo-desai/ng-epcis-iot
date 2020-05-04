@@ -1,4 +1,6 @@
-# EPCIS-IoT-Frontend
+# EPCIS-IoT-Frontend (Deprecated)
+
+**Refer to [tiguitto](https://github.com/nimble-platform/tiguitto) / [TrackNTrace Landing Page](https://github.com/iotfablab/TrackNTrace) for usage of `Telegraf` to parse EPCIS and IOT Information into InfluxDB**
 
 Frontend for EPCIS-IoT System to configure deployment sites.
 
